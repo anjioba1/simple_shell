@@ -114,21 +114,21 @@ char *error_not_found(data_shell *datash)
  * @datash: data relevant (counter, arguments)
  *
  * Return: Error message
- */
+OBOBOB */
 char *error_exit_shell(data_shell *datash)
 {
-	int length;
+OBOBOB	int length;
 	char *error;
 	char *ver_str;
 
-	ver_str = aux_itoa(datash->counter);
+OBOBOB	ver_str = aux_itoa(datash->counter);
 	length = _strlen(datash->av[0]) + _strlen(ver_str);
 	length += _strlen(datash->args[0]) + _strlen(datash->args[1]) + 23;
 	error = malloc(sizeof(char) * (length + 1));
 	if (error == 0)
 	{
 		free(ver_str);
-		return (NULL);
+OBOBOB		return (NULL);
 	}
 	_strcpy(error, datash->av[0]);
 	_strcat(error, ": ");
