@@ -1,74 +1,64 @@
 #include "shell.h"
-
 /**
- * interactive - returns true if shell is interactive mode
- * @info: struct address
- *
- * Return: 1 if interactive mode, 0 otherwise
+ * check_delim - Checks If A Character Match Any Char *
+ * @c: Character To Check
+ * @str: String To Check
+ * Return: 1 Succes, 0 Failed
  */
-int interactive(info_t *info)
+unsigned int check_delim(char c, const char *str)
 {
-	return (isatty(STDIN_FILENO) && info->readfd <= 2);
-}
+	unsigned int i;
 
-/**
- * is_delim - checks if character is a delimeter
- * @c: the char to check
- * @delim: the delimeter string
- * Return: 1 if true, 0 if false
- */
-int is_delim(char c, char *delim)
-{
-	while (*delim)
-		if (*delim++ == c)
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		if (c == str[i])
 			return (1);
+	}
 	return (0);
 }
 
 /**
- *_isalpha - checks for alphabetic character
- *@c: The character to input
- *Return: 1 if c is alphabetic, 0 otherwise
+ * _strtok - Token A String Into Token (strtrok)
+ * @str: String
+ * @delim: Delimiter
+ * Return: Pointer To The Next Token Or NULL
  */
-
-int _isalpha(int c)
+char *_strtok(char *str, const char *delim)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-		return (1);
-	else
-		return (0);
-}
+	static char *ts;
+	static char *nt;
+	unsigned int i;
 
-/**
- *_atoi - converts a string to an integer
- *@s: the string to be converted
- *Return: 0 if no numbers in string, converted number otherwise
- */
-
-int _atoi(char *s)
-{
-	int i, sign = 1, flag = 0, output;
-	unsigned int result = 0;
-
-	for (i = 0;  s[i] != '\0' && flag != 2; i++)
+	if (str != NULL)
+		nt = str;
+	ts = nt;
+	if (ts == NULL)
+		return (NULL);
+	for (i = 0; ts[i] != '\0'; i++)
 	{
-		if (s[i] == '-')
-			sign *= -1;
-
-		if (s[i] >= '0' && s[i] <= '9')
-		{
-			flag = 1;
-			result *= 10;
-			result += (s[i] - '0');
-		}
-		else if (flag == 1)
-			flag = 2;
+		if (check_delim(ts[i], delim) == 0)
+			break;
 	}
-
-	if (sign == -1)
-		output = -result;
+	if (nt[i] == '\0' || nt[i] == '#')
+	{
+		nt = NULL;
+		return (NULL);
+	}
+	ts = nt + i;
+	nt = ts;
+	for (i = 0; nt[i] != '\0'; i++)
+	{
+		if (check_delim(nt[i], delim) == 1)
+			break;
+	}
+	if (nt[i] == '\0')
+		nt = NULL;
 	else
-		output = result;
-
-	return (output);
+	{
+		nt[i] = '\0';
+		nt = nt + i + 1;
+		if (*nt == '\0')
+			nt = NULL;
+	}
+	return (ts);
 }
